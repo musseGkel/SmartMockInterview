@@ -1,0 +1,64 @@
+package com.smartmock.interview.session;
+
+import com.smartmock.interview.domain.InterviewDomain;
+import com.smartmock.interview.dto.FeedbackDto;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+public class InterviewSession {
+
+    private final String id;
+    private final InterviewDomain domain;
+    private SessionState state;
+    private String currentTopic;
+    private String currentQuestion;
+    private final List<QuestionTurn> history = new ArrayList<>();
+
+    public InterviewSession(InterviewDomain domain) {
+        this.id = UUID.randomUUID().toString();
+        this.domain = domain;
+        this.state = SessionState.AWAITING_QUESTION;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public InterviewDomain getDomain() {
+        return domain;
+    }
+
+    public SessionState getState() {
+        return state;
+    }
+
+    public void setState(SessionState state) {
+        this.state = state;
+    }
+
+    public String getCurrentTopic() {
+        return currentTopic;
+    }
+
+    public void setCurrentTopic(String currentTopic) {
+        this.currentTopic = currentTopic;
+    }
+
+    public String getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    public void setCurrentQuestion(String currentQuestion) {
+        this.currentQuestion = currentQuestion;
+    }
+
+    public List<QuestionTurn> getHistory() {
+        return history;
+    }
+
+    public void addTurn(String question, String answer, FeedbackDto feedback) {
+        this.history.add(new QuestionTurn(question, answer, feedback));
+    }
+}
