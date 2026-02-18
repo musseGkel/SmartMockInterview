@@ -1,1 +1,21 @@
 GET http://localhost:8080/test
+
+### Get domains
+GET http://localhost:8080/api/domains
+
+### Start interview
+POST http://localhost:8080/api/interview/start
+Content-Type: application/json
+
+{
+  "domain": "JAVA"
+}
+
+### Answer question (replace SESSION_ID and your answer)
+POST http://localhost:8080/api/interview/answer
+Content-Type: application/json
+
+{
+  "sessionId": "b90107ab-c99b-41b1-af9c-e31089c180ac",
+  "answer": "..."
+}
