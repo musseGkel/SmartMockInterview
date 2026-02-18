@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class InterviewSessionStore {
 
     private final Map<String, InterviewSession> sessions = new ConcurrentHashMap<>();
