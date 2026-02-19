@@ -1,41 +1,33 @@
-package com.smartmock.interview.session;
+package com.smartmock.interview.infrastructure.persistence;
 
+import com.smartmock.interview.application.port.InterviewSessionRepository;
 import com.smartmock.interview.domain.InterviewDomain;
+import com.smartmock.interview.domain.InterviewSession;
+import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.stereotype.Service;
-
-@Service
-public class InterviewSessionStore {
+@Repository
+public class InMemoryInterviewSessionRepository implements InterviewSessionRepository {
 
     private final Map<String, InterviewSession> sessions = new ConcurrentHashMap<>();
 
+    @Override
     public InterviewSession create(InterviewDomain domain) {
         InterviewSession session = new InterviewSession(domain);
         sessions.put(session.getId(), session);
         return session;
     }
 
+    @Override
     public Optional<InterviewSession> findById(String sessionId) {
         return Optional.ofNullable(sessions.get(sessionId));
     }
 
-    public InterviewSession requireById(String sessionId) {
-        InterviewSession session = sessions.get(sessionId);
-        if (session == null) {
-            throw new IllegalArgumentException("Session not found: " + sessionId);
-        }
-        return session;
-    }
-
+    @Override
     public void save(InterviewSession session) {
         sessions.put(session.getId(), session);
-    }
-
-    public void delete(String sessionId) {
-        sessions.remove(sessionId);
     }
 }

@@ -1,8 +1,8 @@
-package com.smartmock.interview.dto;
+package com.smartmock.interview.domain;
 
 import java.util.List;
 
-public record FeedbackDto(
+public record Feedback(
                 int score, List<String> strengths,
                 List<String> improvements, String summary) {
 

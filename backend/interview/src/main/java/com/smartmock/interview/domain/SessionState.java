@@ -1,4 +1,4 @@
-package com.smartmock.interview.session;
+package com.smartmock.interview.domain;
 
 public enum SessionState {
     AWAITING_QUESTION,

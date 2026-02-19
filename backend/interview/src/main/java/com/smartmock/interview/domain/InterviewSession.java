@@ -1,7 +1,4 @@
-package com.smartmock.interview.session;
-
-import com.smartmock.interview.domain.InterviewDomain;
-import com.smartmock.interview.dto.FeedbackDto;
+package com.smartmock.interview.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +55,7 @@ public class InterviewSession {
         return history;
     }
 
-    public void addTurn(String question, String answer, FeedbackDto feedback) {
+    public void addTurn(String question, String answer, Feedback feedback) {
         this.history.add(new QuestionTurn(question, answer, feedback));
     }
 }
