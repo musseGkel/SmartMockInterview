@@ -1,7 +1,8 @@
 package com.smartmock.interview.domain;
 
 public record QuestionTurn(
-        String question,
-        String answer,
-        Feedback feedback) {
+                Integer turnNumber,
+                String question,
+                String answer,
+                Feedback feedback) {
 }
