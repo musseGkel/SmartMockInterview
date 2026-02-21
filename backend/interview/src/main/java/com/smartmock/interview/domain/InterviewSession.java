@@ -56,6 +56,7 @@ public class InterviewSession {
     }
 
     public void addTurn(String question, String answer, Feedback feedback) {
-        this.history.add(new QuestionTurn(question, answer, feedback));
+        int turnNumber = this.history.size() + 1;
+        this.history.add(new QuestionTurn(turnNumber, question, answer, feedback));
     }
 }
