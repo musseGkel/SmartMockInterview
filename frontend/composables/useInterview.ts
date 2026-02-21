@@ -25,3 +25,32 @@ export const useInterview = () => {
 
   return { startInterview, submitAnswer, getDomains };
 };
+export interface Feedback {
+  score: number;
+  strengths: string[];
+  improvements: string[];
+  summary: string;
+}
+
+export interface QuestionTurn {
+  turnNumber: number;
+  question: string;
+  answer: string;
+  feedback: Feedback;
+}
+
+export interface StartResponse {
+  sessionId: string;
+  question: string;
+  topic?: string;
+}
+
+export interface AnswerResponse {
+  previousQuestion: string;
+  previousTopic?: string;
+  previousAnswer: string;
+  feedback: Feedback;
+  nextQuestion?: string;
+  topic?: string;
+  finished: boolean;
+}
