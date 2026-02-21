@@ -1,22 +1,12 @@
 <script setup lang="ts">
-interface Feedback {
-  score: number
-  strengths: string[]
-  improvements: string[]
-  summary: string
-}
-
 defineProps<{
-  feedback: Feedback
-}>()
+  feedback: Feedback;
+}>();
 </script>
 
 <template>
   <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 space-y-4">
-
-    <div class="text-lg font-semibold">
-      Score: {{ feedback.score }}/5
-    </div>
+    <div class="text-lg font-semibold">Score: {{ feedback.score }}/5</div>
 
     <div>
       <h3 class="font-semibold text-green-400">Strengths</h3>
@@ -39,6 +29,5 @@ defineProps<{
     <div class="text-gray-300">
       {{ feedback.summary }}
     </div>
-
   </div>
 </template>
