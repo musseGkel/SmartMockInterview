@@ -85,6 +85,7 @@ public class InterviewApplicationService {
         sessionRepository.save(session);
 
         return new AnswerResponse(
+                session.getHistory(),
                 feedback,
                 finished ? null : session.getCurrentQuestion(),
                 finished ? null : session.getCurrentTopic(),
