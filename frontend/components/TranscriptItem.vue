@@ -1,15 +1,13 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   turn: QuestionTurn;
   index: number;
-  defaultOpen?: boolean;
+  open: boolean;
 }>();
 
-const open = ref(props.defaultOpen ?? false);
-
-const toggle = () => {
-  open.value = !open.value;
-};
+defineEmits<{
+  (e: "toggle"): void;
+}>();
 </script>
 
 <template>
@@ -22,12 +20,12 @@ const toggle = () => {
           </div>
 
           <div class="text-sm text-gray-400 mt-2">
-            Score: {{ turn.feedback.score }}/5
+            Score: {{ turn.feedback?.score ?? "-" }}/5
           </div>
         </div>
 
         <button
-          @click="toggle"
+          @click="$emit('toggle')"
           class="shrink-0 text-sm px-3 py-1 rounded-lg border border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white transition"
         >
           {{ open ? "Hide" : "Show" }}
