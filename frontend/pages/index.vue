@@ -31,6 +31,7 @@ const begin = async (domain: string) => {
         sessionId: res.sessionId,
         question: res.question,
         topic: res.topic ?? "",
+        domain,
       },
     });
   } catch (e) {
