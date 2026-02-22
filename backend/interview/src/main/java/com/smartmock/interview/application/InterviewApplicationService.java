@@ -28,7 +28,7 @@ public class InterviewApplicationService {
 
     public List<String> listDomains() {
         return List.of(InterviewDomain.values()).stream()
-                .map(Enum::name)
+                .map(domain -> domain.name().replace("_", " "))
                 .toList();
     }
 
@@ -97,7 +97,7 @@ public class InterviewApplicationService {
             throw new IllegalArgumentException("domain is required");
         }
         try {
-            return InterviewDomain.valueOf(domainStr.trim().toUpperCase());
+            return InterviewDomain.valueOf(domainStr.trim().toUpperCase().replace(" ", "_"));
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Unknown domain: " + domainStr);
         }
