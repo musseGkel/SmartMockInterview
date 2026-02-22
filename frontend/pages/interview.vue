@@ -2,17 +2,15 @@
 const route = useRoute();
 const { submitAnswer } = useInterview();
 
-const sessionId = computed(() => {
-  const v = route.query.sessionId;
+const getQueryString = (key: string) => {
+  const v = route.query[key];
   return typeof v === "string" ? v : "";
-});
+};
 
-const question = ref<string>(
-  typeof route.query.question === "string" ? route.query.question : "",
-);
-const topic = ref<string>(
-  typeof route.query.topic === "string" ? route.query.topic : "",
-);
+const sessionId = computed(() => getQueryString("sessionId"));
+const domain = computed(() => getQueryString("domain"));
+const question = ref(getQueryString("question"));
+const topic = ref(getQueryString("topic"));
 
 if (process.client && !sessionId.value) {
   await navigateTo("/");
@@ -78,6 +76,26 @@ const orderedHistory = computed(() => {
   );
 });
 
+const openTurnNumber = ref<number | null>(null);
+
+const latestOpenTurn = computed(() => {
+  if (history.value.length === 0) return null;
+  return Math.max(...history.value.map((t) => t.turnNumber ?? 0));
+});
+
+watch(
+  latestOpenTurn,
+  (newVal) => {
+    if (newVal !== null) openTurnNumber.value = newVal;
+  },
+  { immediate: true },
+);
+
+const toggleTurn = (turnNumber: number) => {
+  openTurnNumber.value =
+    openTurnNumber.value === turnNumber ? null : turnNumber;
+};
+
 const startNew = async () => {
   await navigateTo("/");
 };
@@ -89,7 +107,12 @@ const startNew = async () => {
   >
     <div class="w-full max-w-4xl space-y-8">
       <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Interview Session</h1>
+        <div>
+          <h1 class="text-2xl font-bold">Interview Session</h1>
+          <p v-if="domain" class="text-sm text-blue-400 mt-1">
+            Domain: <span class="font-medium text-white">{{ domain }}</span>
+          </p>
+        </div>
         <button
           @click="startNew"
           class="text-sm text-gray-400 hover:text-white transition"
@@ -130,7 +153,7 @@ const startNew = async () => {
 
           <button
             @click="sendAnswer"
-            :disabled="loading"
+            :disabled="loading || answer.trim() === ''"
             class="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 px-6 py-3 rounded-lg font-semibold transition"
           >
             Submit Answer
@@ -173,11 +196,12 @@ const startNew = async () => {
 
         <div v-else class="space-y-6">
           <TranscriptItem
-            v-for="(turn, idx) in orderedHistory"
-            :key="idx"
+            v-for="turn in orderedHistory"
+            :key="turn.turnNumber"
             :turn="turn"
-            :index="idx + 1"
-            :defaultOpen="idx === orderedHistory.length - 1"
+            :index="turn.turnNumber"
+            :open="openTurnNumber === turn.turnNumber"
+            @toggle="turn.turnNumber != null && toggleTurn(turn.turnNumber)"
           />
         </div>
       </div>
