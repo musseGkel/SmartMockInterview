@@ -12,7 +12,7 @@ const domain = computed(() => getQueryString("domain"));
 const question = ref(getQueryString("question"));
 const topic = ref(getQueryString("topic"));
 
-if (process.client && !sessionId.value) {
+if (import.meta.client && !sessionId.value) {
   await navigateTo("/");
 }
 

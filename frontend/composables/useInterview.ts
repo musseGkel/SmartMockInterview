@@ -46,9 +46,7 @@ export interface StartResponse {
 }
 
 export interface AnswerResponse {
-  previousQuestion: string;
-  previousTopic?: string;
-  previousAnswer: string;
+  history: QuestionTurn[];
   feedback: Feedback;
   nextQuestion?: string;
   topic?: string;
