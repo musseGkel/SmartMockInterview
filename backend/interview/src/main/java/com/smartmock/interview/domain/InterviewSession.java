@@ -8,14 +8,16 @@ public class InterviewSession {
 
     private final String id;
     private final InterviewDomain domain;
+    private final String ownerUserId;
     private SessionState state;
     private String currentTopic;
     private String currentQuestion;
     private final List<QuestionTurn> history = new ArrayList<>();
 
-    public InterviewSession(InterviewDomain domain) {
+    public InterviewSession(InterviewDomain domain, String ownerUserId) {
         this.id = UUID.randomUUID().toString();
         this.domain = domain;
+        this.ownerUserId = ownerUserId;
         this.state = SessionState.AWAITING_QUESTION;
     }
 
@@ -25,6 +27,10 @@ public class InterviewSession {
 
     public InterviewDomain getDomain() {
         return domain;
+    }
+
+    public String getOwnerUserId() {
+        return ownerUserId;
     }
 
     public SessionState getState() {
