@@ -2,10 +2,14 @@ package com.smartmock.interview.api;
 
 import com.smartmock.interview.api.dto.AnswerRequest;
 import com.smartmock.interview.api.dto.AnswerResponse;
+import com.smartmock.interview.api.dto.InterviewAnalyticsResponse;
+import com.smartmock.interview.api.dto.InterviewHistoryDetailResponse;
+import com.smartmock.interview.api.dto.InterviewHistoryItemResponse;
 import com.smartmock.interview.api.dto.StartInterviewRequest;
 import com.smartmock.interview.api.dto.StartInterviewResponse;
 import com.smartmock.interview.application.InterviewApplicationService;
 import com.smartmock.interview.auth.domain.UserPrincipal;
+import com.smartmock.interview.domain.InterviewSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,5 +56,39 @@ public class InterviewController {
             }
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
         }
+    }
+
+    @GetMapping("/api/interview/analytics")
+    public InterviewAnalyticsResponse getAnalytics(
+            @AuthenticationPrincipal UserPrincipal principal) {
+        return applicationService.getAnalyticsForUser(principal.id());
+    }
+
+    @GetMapping("/api/interview/history")
+    public List<InterviewHistoryItemResponse> getHistory(
+            @AuthenticationPrincipal UserPrincipal principal) {
+        return applicationService.getHistoryForUser(principal.id()).stream()
+                .map(session -> new InterviewHistoryItemResponse(
+                        session.getId(),
+                        session.getDomain().name(),
+                        session.getState().name(),
+                        session.getCurrentQuestion(),
+                        session.getHistory().size()))
+                .toList();
+    }
+
+    @GetMapping("/api/interview/history/{sessionId}")
+    public InterviewHistoryDetailResponse getHistorySession(
+            @PathVariable String sessionId,
+            @AuthenticationPrincipal UserPrincipal principal) {
+        InterviewSession session = applicationService.getHistorySessionForUser(principal.id(), sessionId);
+
+        return new InterviewHistoryDetailResponse(
+                session.getId(),
+                session.getDomain().name(),
+                session.getOwnerUserId(),
+                session.getState().name(),
+                session.getCurrentQuestion(),
+                session.getHistory());
     }
 }
