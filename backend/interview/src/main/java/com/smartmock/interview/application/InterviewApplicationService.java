@@ -32,10 +32,10 @@ public class InterviewApplicationService {
                 .toList();
     }
 
-    public StartInterviewResponse startInterview(String domainStr) {
+    public StartInterviewResponse startInterview(String domainStr, String ownerUserId) {
         InterviewDomain domain = parseDomain(domainStr);
 
-        InterviewSession session = sessionRepository.create(domain);
+        InterviewSession session = sessionRepository.create(domain, ownerUserId);
         QuestionGenerator.GeneratedQuestion next = questionGenerator.generateNext(domain, session.getHistory());
 
         session.setCurrentTopic(next.topic());
