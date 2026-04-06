@@ -25,6 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/interview/start").permitAll()
                         .requestMatchers("/api/interview/answer").permitAll()
                         .requestMatchers("/api/me").authenticated()
+                        .requestMatchers("/api/interview/analytics").authenticated()
                         .requestMatchers("/api/interview/history/**").authenticated()
                         .anyRequest().permitAll())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
