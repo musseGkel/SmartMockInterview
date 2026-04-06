@@ -8,6 +8,7 @@ import com.smartmock.interview.application.port.QuestionGenerator;
 import com.smartmock.interview.domain.*;
 
 import java.util.List;
+import com.smartmock.interview.api.dto.InterviewAnalyticsResponse;
 
 public class InterviewApplicationService {
 
@@ -101,6 +102,56 @@ public class InterviewApplicationService {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Unknown domain: " + domainStr);
         }
+    }
+
+    public List<InterviewSession> getHistoryForUser(String ownerUserId) {
+        if (ownerUserId == null || ownerUserId.isBlank()) {
+            throw new IllegalArgumentException("Owner user id is required");
+        }
+
+        return sessionRepository.findAllByOwnerUserId(ownerUserId);
+    }
+
+    public InterviewSession getHistorySessionForUser(String ownerUserId, String sessionId) {
+        if (ownerUserId == null || ownerUserId.isBlank()) {
+            throw new IllegalArgumentException("Owner user id is required");
+        }
+
+        if (sessionId == null || sessionId.isBlank()) {
+            throw new IllegalArgumentException("Session id is required");
+        }
+
+        InterviewSession session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("Interview session not found"));
+
+        if (session.getOwnerUserId() == null || !session.getOwnerUserId().equals(ownerUserId)) {
+            throw new IllegalArgumentException("Interview session not found");
+        }
+
+        return session;
+    }
+
+    public InterviewAnalyticsResponse getAnalyticsForUser(String ownerUserId) {
+        if (ownerUserId == null || ownerUserId.isBlank()) {
+            throw new IllegalArgumentException("Owner user id is required");
+        }
+
+        List<InterviewSession> sessions = sessionRepository.findAllByOwnerUserId(ownerUserId);
+
+        long totalSessions = sessions.size();
+
+        long activeSessions = sessions.stream()
+                .filter(session -> session.getState() != SessionState.FINISHED)
+                .count();
+
+        long finishedSessions = sessions.stream()
+                .filter(session -> session.getState() == SessionState.FINISHED)
+                .count();
+
+        return new InterviewAnalyticsResponse(
+                totalSessions,
+                activeSessions,
+                finishedSessions);
     }
 
 }
