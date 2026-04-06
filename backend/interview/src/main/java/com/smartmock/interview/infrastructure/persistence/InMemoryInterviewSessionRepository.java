@@ -5,6 +5,7 @@ import com.smartmock.interview.domain.InterviewDomain;
 import com.smartmock.interview.domain.InterviewSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,8 +16,8 @@ public class InMemoryInterviewSessionRepository implements InterviewSessionRepos
     private final Map<String, InterviewSession> sessions = new ConcurrentHashMap<>();
 
     @Override
-    public InterviewSession create(InterviewDomain domain) {
-        InterviewSession session = new InterviewSession(domain);
+    public InterviewSession create(InterviewDomain domain, String ownerUserId) {
+        InterviewSession session = new InterviewSession(domain, ownerUserId);
         sessions.put(session.getId(), session);
         return session;
     }
@@ -29,5 +30,12 @@ public class InMemoryInterviewSessionRepository implements InterviewSessionRepos
     @Override
     public void save(InterviewSession session) {
         sessions.put(session.getId(), session);
+    }
+
+    @Override
+    public List<InterviewSession> findAllByOwnerUserId(String ownerUserId) {
+        return sessions.values().stream()
+                .filter(session -> ownerUserId != null && ownerUserId.equals(session.getOwnerUserId()))
+                .toList();
     }
 }
