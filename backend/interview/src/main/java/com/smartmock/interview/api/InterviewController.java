@@ -58,13 +58,13 @@ public class InterviewController {
         }
     }
 
-    @GetMapping("/api/interview/analytics")
+    @GetMapping("/interview/analytics")
     public InterviewAnalyticsResponse getAnalytics(
             @AuthenticationPrincipal UserPrincipal principal) {
         return applicationService.getAnalyticsForUser(principal.id());
     }
 
-    @GetMapping("/api/interview/history")
+    @GetMapping("/interview/history")
     public List<InterviewHistoryItemResponse> getHistory(
             @AuthenticationPrincipal UserPrincipal principal) {
         return applicationService.getHistoryForUser(principal.id()).stream()
@@ -77,7 +77,7 @@ public class InterviewController {
                 .toList();
     }
 
-    @GetMapping("/api/interview/history/{sessionId}")
+    @GetMapping("/interview/history/{sessionId}")
     public InterviewHistoryDetailResponse getHistorySession(
             @PathVariable String sessionId,
             @AuthenticationPrincipal UserPrincipal principal) {
