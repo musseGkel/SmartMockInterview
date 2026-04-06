@@ -5,7 +5,10 @@ import com.smartmock.interview.api.dto.AnswerResponse;
 import com.smartmock.interview.api.dto.StartInterviewRequest;
 import com.smartmock.interview.api.dto.StartInterviewResponse;
 import com.smartmock.interview.application.InterviewApplicationService;
+import com.smartmock.interview.auth.domain.UserPrincipal;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,9 +30,12 @@ public class InterviewController {
     }
 
     @PostMapping("/interview/start")
-    public StartInterviewResponse startInterview(@RequestBody StartInterviewRequest request) {
+    public StartInterviewResponse startInterview(
+            @RequestBody StartInterviewRequest request,
+            @AuthenticationPrincipal UserPrincipal principal) {
         try {
-            return applicationService.startInterview(request.domain());
+            String ownerUserId = principal != null ? principal.id() : null;
+            return applicationService.startInterview(request.domain(), ownerUserId);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
