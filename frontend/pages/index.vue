@@ -5,6 +5,12 @@ interface StartResponse {
   topic?: string;
 }
 
+const auth = useAuthStore();
+
+const logout = async () => {
+  await auth.logout();
+};
+
 const { getDomains, startInterview } = useInterview();
 
 const loading = ref(false);
@@ -43,6 +49,29 @@ const begin = async (domain: string) => {
 </script>
 
 <template>
+  <div class="absolute top-6 right-6 flex items-center gap-3">
+    <template v-if="auth.isAuthenticated">
+      <span class="text-sm text-gray-300">{{ auth.user?.email }}</span>
+      <button
+        @click="logout"
+        class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg"
+      >
+        Logout
+      </button>
+    </template>
+
+    <template v-else>
+      <NuxtLink to="/login" class="text-sm text-gray-300 hover:text-white"
+        >Login</NuxtLink
+      >
+      <NuxtLink
+        to="/register"
+        class="text-sm bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg"
+      >
+        Register
+      </NuxtLink>
+    </template>
+  </div>
   <div
     class="min-h-screen bg-gray-950 text-white flex flex-col items-center justify-center px-6"
   >
