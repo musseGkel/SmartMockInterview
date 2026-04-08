@@ -2,6 +2,10 @@
 const route = useRoute();
 const { getHistorySession } = useInterview();
 
+definePageMeta({
+  middleware: "auth",
+});
+
 const sessionId = computed(() => {
   const value = route.params.sessionId;
   return typeof value === "string" ? value : "";
@@ -18,6 +22,13 @@ try {
 } finally {
   loading.value = false;
 }
+
+const openTurnNumber = ref<number | null>(null);
+
+const toggleTurn = (turnNumber: number) => {
+  openTurnNumber.value =
+    openTurnNumber.value === turnNumber ? null : turnNumber;
+};
 </script>
 
 <template>
@@ -34,34 +45,17 @@ try {
         <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
           <h1 class="text-2xl font-bold">{{ session.domain }}</h1>
           <p class="text-sm text-gray-400 mt-2">State: {{ session.state }}</p>
-          <p class="text-sm text-gray-400">
-            Current question: {{ session.currentQuestion }}
-          </p>
         </div>
 
         <div class="space-y-4">
-          <div
+          <TranscriptItem
             v-for="turn in session.history"
             :key="turn.turnNumber"
-            class="bg-gray-900 border border-gray-800 rounded-xl p-5 space-y-3"
-          >
-            <div class="font-semibold">Turn {{ turn.turnNumber }}</div>
-            <div>
-              <div class="text-sm text-gray-400">Question</div>
-              <div>{{ turn.question }}</div>
-            </div>
-            <div>
-              <div class="text-sm text-gray-400">Answer</div>
-              <div>{{ turn.answer }}</div>
-            </div>
-            <div v-if="turn.feedback">
-              <div class="text-sm text-gray-400">Feedback</div>
-              <div>Score: {{ turn.feedback.score }}/5</div>
-              <div class="mt-2 text-sm text-gray-300">
-                {{ turn.feedback.summary }}
-              </div>
-            </div>
-          </div>
+            :turn="turn"
+            :index="turn.turnNumber"
+            :open="openTurnNumber === turn.turnNumber"
+            @toggle="turn.turnNumber != null && toggleTurn(turn.turnNumber)"
+          />
         </div>
       </div>
     </div>
