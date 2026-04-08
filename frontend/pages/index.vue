@@ -49,24 +49,36 @@ const begin = async (domain: string) => {
 </script>
 
 <template>
-  <div class="absolute top-6 right-6 flex items-center gap-3">
+  <div class="absolute top-6 right-6 flex items-center gap-4">
     <template v-if="auth.isAuthenticated">
-      <span class="text-sm text-gray-300">{{ auth.user?.email }}</span>
+      <NuxtLink to="/history" class="text-sm text-gray-300 hover:text-white">
+        History
+      </NuxtLink>
+
+      <NuxtLink to="/analytics" class="text-sm text-gray-300 hover:text-white">
+        Analytics
+      </NuxtLink>
+
+      <span class="text-sm text-gray-400">
+        {{ auth.user?.email }}
+      </span>
+
       <button
         @click="logout"
-        class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg"
+        class="text-sm bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded"
       >
         Logout
       </button>
     </template>
 
     <template v-else>
-      <NuxtLink to="/login" class="text-sm text-gray-300 hover:text-white"
-        >Login</NuxtLink
-      >
+      <NuxtLink to="/login" class="text-sm text-gray-300 hover:text-white">
+        Login
+      </NuxtLink>
+
       <NuxtLink
         to="/register"
-        class="text-sm bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg"
+        class="text-sm bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded"
       >
         Register
       </NuxtLink>
