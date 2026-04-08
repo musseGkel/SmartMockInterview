@@ -178,6 +178,14 @@ const startNew = async () => {
         >
           Start New Interview
         </button>
+        <div>
+          <NuxtLink
+            :to="`/historyDetail/${sessionId}`"
+            class="inline-block text-blue-400 hover:text-blue-300"
+          >
+            View full session
+          </NuxtLink>
+        </div>
       </div>
 
       <!-- Transcript -->
