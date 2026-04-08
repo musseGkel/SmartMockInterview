@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const { getAnalytics } = useInterview();
 
+definePageMeta({
+  middleware: "auth",
+});
+
 const loading = ref(true);
 const error = ref<string | null>(null);
 const analytics = ref<InterviewAnalyticsResponse | null>(null);
@@ -12,13 +16,24 @@ try {
 } finally {
   loading.value = false;
 }
+
+const startNew = async () => {
+  await navigateTo("/");
+};
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-950 text-white px-6 py-10">
     <div class="max-w-3xl mx-auto space-y-6">
-      <h1 class="text-3xl font-bold">Analytics</h1>
-
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Analytics</h1>
+        <button
+          @click="startNew"
+          class="text-sm text-gray-400 hover:text-white transition"
+        >
+          Exit
+        </button>
+      </div>
       <div v-if="loading" class="text-blue-400">Loading...</div>
       <div v-else-if="error" class="text-red-400">{{ error }}</div>
 
