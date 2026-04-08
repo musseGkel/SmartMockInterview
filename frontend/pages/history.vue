@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const { getHistory } = useInterview();
 
+definePageMeta({
+  middleware: "auth",
+});
+
 const loading = ref(true);
 const error = ref<string | null>(null);
 const historyItems = ref<InterviewHistoryItemResponse[]>([]);
@@ -12,13 +16,28 @@ try {
 } finally {
   loading.value = false;
 }
+
+const startNew = async () => {
+  await navigateTo("/");
+};
+
+const goToHistoryDetail = async (sessionId: string) => {
+  await navigateTo(`/historyDetail/${sessionId}`);
+};
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-950 text-white px-6 py-10">
     <div class="max-w-4xl mx-auto space-y-6">
-      <h1 class="text-3xl font-bold">Interview History</h1>
-
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Interview History</h1>
+        <button
+          @click="startNew"
+          class="text-sm text-gray-400 hover:text-white transition"
+        >
+          Exit
+        </button>
+      </div>
       <div v-if="loading" class="text-blue-400">Loading...</div>
       <div v-else-if="error" class="text-red-400">{{ error }}</div>
       <div v-else-if="historyItems.length === 0" class="text-gray-400">
@@ -36,12 +55,13 @@ try {
               <div class="text-lg font-semibold">{{ item.domain }}</div>
               <div class="text-sm text-gray-400">State: {{ item.state }}</div>
             </div>
-            <NuxtLink
-              :to="`/history/${item.sessionId}`"
+
+            <button
               class="text-blue-400 hover:text-blue-300"
+              @click="goToHistoryDetail(item.sessionId)"
             >
               View
-            </NuxtLink>
+            </button>
           </div>
 
           <div class="mt-3 text-sm text-gray-300">
