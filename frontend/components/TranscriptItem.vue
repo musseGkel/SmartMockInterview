@@ -28,7 +28,7 @@ defineEmits<{
           @click="$emit('toggle')"
           class="shrink-0 text-sm px-3 py-1 rounded-lg border border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white transition"
         >
-          {{ open ? "Hide" : "Show" }}
+          {{ open ? "Hide Details" : "Show Details" }}
         </button>
       </div>
 
