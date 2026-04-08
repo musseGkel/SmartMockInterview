@@ -18,6 +18,10 @@ const submit = async () => {
     loading.value = false;
   }
 };
+
+const startNew = async () => {
+  await navigateTo("/");
+};
 </script>
 
 <template>
@@ -27,7 +31,15 @@ const submit = async () => {
     <div
       class="w-full max-w-md bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-4"
     >
-      <h1 class="text-2xl font-bold">Register</h1>
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Register</h1>
+        <button
+          @click="startNew"
+          class="text-sm text-gray-400 hover:text-white transition"
+        >
+          Exit
+        </button>
+      </div>
 
       <div v-if="error" class="text-red-400">{{ error }}</div>
 
