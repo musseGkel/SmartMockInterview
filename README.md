@@ -158,6 +158,10 @@ npm run dev
 - Scalable and extensible system design
 
 ---
+<div align="center">
+  <img src="https://github.com/musseGkel/Github--demo/blob/main/SmartMockInterview.png"  />
+</div>
+---
 
 ## 📄 License
 This project is open-source and available under the MIT License.
